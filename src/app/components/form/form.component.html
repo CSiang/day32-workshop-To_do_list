@@ -1,0 +1,62 @@
+<h2>Add Todo!!!</h2>
+
+<form [formGroup]="form" (ngSubmit)="submitTodo()">
+    <table>
+        <tr>
+            <th>Name: </th>
+            <td><input type="text" formControlName="name"></td>
+        </tr>
+        <tr>
+            <th>Project Name:</th>
+            <td>
+                <input type="text" formControlName="project">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit" [disabled]="invalid()">Submit Todo</button>
+                <button type="button" (click)="addTask()">Add Tasks</button>
+                <button type="button" (click)="delLocalStorage()">Remove Saved Todos</button>
+            </td>
+        </tr>
+    </table>
+    <div *ngIf="localStorageList.length>0">
+        <br>
+        <select #localStorageValue>
+            <option *ngFor="let localStorage of localStorageList"  value="{{localStorage}}">{{localStorage}}</option>
+        </select>
+        <button type="button" (click)="loadLocalStorage(localStorageValue.value)">Get This</button>
+        <button type="button" (click)="delSelectedLocalStorage(localStorageValue.value)">Remove</button>
+    </div>
+    <br>
+    <table *ngIf="array.length>0, else noTask" formArrayName="tasks">
+        <tr>
+            <th>Task Name</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+        </tr>
+        <tr *ngFor="let task of array.controls; let i = index" [formGroupName]="i">
+            <td>
+                <input type="text" formControlName="taskName">
+            </td>
+            <td>
+                <select formControlName="priority">
+                    <option value="1">Low</option>
+                    <option value="2">Mid</option>
+                    <option value="3">High</option>
+                </select>
+            </td>
+            <td>
+                <input type="date" formControlName="dueDate">
+            </td>
+            <td>
+                <button type="button" (click)="delTask(i)">Delete</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<ng-template #noTask>
+    <h4>Please add task.</h4>
+</ng-template>
